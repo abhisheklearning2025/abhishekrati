@@ -1,26 +1,142 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Wedding Color Palette */
+  --background: #fefdf9;
+  --foreground: #2d1810;
+  
+  /* Indian Wedding Colors */
+  --rose-gold: #e8b4a0;
+  --deep-red: #8b0000;
+  --golden: #ffd700;
+  --saffron: #ff9933;
+  --turmeric: #e4b429;
+  --marigold: #ffb347;
+  --crimson: #dc143c;
+  --maroon: #800020;
+  
+  /* Gradients */
+  --engagement-gradient: linear-gradient(135deg, #ffb6c1, #ffc0cb, #f0e68c);
+  --tilak-gradient: linear-gradient(135deg, #ff9933, #ffd700, #ffb347);
+  --haldi-gradient: linear-gradient(135deg, #e4b429, #ffd700, #ffff99);
+  --sangeet-gradient: linear-gradient(135deg, #ff1493, #9370db, #4169e1);
+  --wedding-gradient: linear-gradient(135deg, #8b0000, #dc143c, #ffd700);
+  --reception-gradient: linear-gradient(135deg, #800020, #ff6347, #ffd700);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor for magical effect */
+.cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, var(--golden), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease;
+}
+
+/* Section base styles */
+.section {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Typography */
+.wedding-title {
+  font-family: var(--font-playfair), serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.wedding-subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Animation utilities */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 20px currentColor; }
+  to { text-shadow: 0 0 30px currentColor, 0 0 40px currentColor; }
+}
+
+/* Particle canvas positioning */
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Content positioning */
+.section-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
