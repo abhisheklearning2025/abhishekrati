@@ -7,6 +7,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import RosePetalParticles from '../3d/RosePetalParticles';
 import FloatingRing from '../3d/FloatingRing';
+import CinematicText from '../animations/CinematicText';
+import ScrollMagic from '../animations/ScrollMagic';
+import ParallaxElements from '../animations/ParallaxElements';
 
 export default function EngagementSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -112,31 +115,57 @@ export default function EngagementSection() {
       {/* Content overlay */}
       <div className="section-content h-full flex items-center justify-center">
         <div className="text-center z-10 max-w-4xl mx-auto px-8">
-          {/* Main title */}
-          <div ref={titleRef} className="wedding-title text-6xl md:text-8xl text-white mb-6 drop-shadow-lg">
-            The Beginning
-          </div>
-          
-          {/* Subtitle */}
-          <div ref={subtitleRef} className="wedding-subtitle text-white/90 text-xl md:text-2xl mb-8 tracking-wider">
-            Where Two Hearts Became One
-          </div>
-          
-          {/* Story content */}
-          <div ref={contentRef} className="text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
-            <p className="mb-6">
-              In a moment that sparkled brighter than the stars above, 
-              <span className="font-semibold text-white"> Abhishek</span> asked 
-              <span className="font-semibold text-white"> Krati</span> to be his forever.
-            </p>
-            <p>
-              This magical evening marked the beginning of their journey together, 
-              surrounded by love, laughter, and the promise of a beautiful future.
-            </p>
-          </div>
+          {/* Parallax background elements */}
+          <ParallaxElements speed={0.3} direction="up">
+            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent rounded-full blur-3xl opacity-30"></div>
+          </ParallaxElements>
 
-          {/* Photo gallery placeholder */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          {/* Main title with cinematic animation */}
+          <CinematicText 
+            text="The Beginning"
+            className="wedding-title text-6xl md:text-8xl text-white mb-6 drop-shadow-lg"
+            animationType="glow"
+            triggerElement="#engagement"
+          />
+          
+          {/* Subtitle with typewriter effect */}
+          <CinematicText 
+            text="Where Two Hearts Became One"
+            className="wedding-subtitle text-white/90 text-xl md:text-2xl mb-8 tracking-wider"
+            animationType="typewriter"
+            delay={1}
+            triggerElement="#engagement"
+          />
+          
+          {/* Story content with scroll magic */}
+          <ScrollMagic 
+            animationType="slide" 
+            direction="up" 
+            distance={80}
+            stagger={0.3}
+            triggerStart="top 70%"
+          >
+            <div className="text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+              <p className="mb-6">
+                In a moment that sparkled brighter than the stars above, 
+                <span className="font-semibold text-white"> Abhishek</span> asked 
+                <span className="font-semibold text-white"> Krati</span> to be his forever.
+              </p>
+              <p>
+                This magical evening marked the beginning of their journey together, 
+                surrounded by love, laughter, and the promise of a beautiful future.
+              </p>
+            </div>
+          </ScrollMagic>
+
+          {/* Photo gallery with 3D hover effects */}
+          <ScrollMagic 
+            animationType="scale" 
+            stagger={0.2}
+            delay={2}
+            triggerStart="top 60%"
+          >
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             <div 
               className="aspect-square bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 flex items-center justify-center hover:scale-105 transition-transform duration-300"
               data-photo-type="engagement-couple-main"
@@ -172,7 +201,8 @@ export default function EngagementSection() {
                 <div className="text-xs">Together Forever</div>
               </div>
             </div>
-          </div>
+            </div>
+          </ScrollMagic>
 
           {/* Scroll indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">

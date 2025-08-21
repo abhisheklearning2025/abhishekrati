@@ -5,6 +5,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import TurmericParticles from '../3d/TurmericParticles';
+import MusicalNoteParticles from '../3d/MusicalNoteParticles';
 
 export default function HaldiSangeetSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -60,6 +62,28 @@ export default function HaldiSangeetSection() {
         background: 'linear-gradient(135deg, var(--haldi-gradient) 0%, var(--haldi-gradient) 50%, var(--sangeet-gradient) 50%, var(--sangeet-gradient) 100%)' 
       }}
     >
+      {/* Dual particle systems for haldi and sangeet */}
+      <div className="particle-canvas">
+        <Canvas>
+          <PerspectiveCamera makeDefault position={[0, 0, 8]} />
+          <ambientLight intensity={0.6} />
+          <pointLight position={[5, 5, 5]} intensity={1} />
+          <pointLight position={[-5, 5, -5]} intensity={0.8} color="#ff6600" />
+          
+          {/* Turmeric particles for haldi side */}
+          <group position={[-5, 0, 0]}>
+            <TurmericParticles count={3000} />
+          </group>
+          
+          {/* Musical note particles for sangeet side */}
+          <group position={[5, 0, 0]}>
+            <MusicalNoteParticles count={2500} />
+          </group>
+          
+          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.2} />
+        </Canvas>
+      </div>
+
       <div className="section-content h-full flex items-center justify-center">
         <div className="text-center z-10 max-w-6xl mx-auto px-8">
           <div ref={titleRef} className="wedding-title text-6xl md:text-8xl text-white mb-6 drop-shadow-lg">

@@ -5,6 +5,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SacredFireParticles from '../3d/SacredFireParticles';
+import ConfettiParticles from '../3d/ConfettiParticles';
 
 export default function WeddingReceptionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -60,6 +62,27 @@ export default function WeddingReceptionSection() {
         background: 'linear-gradient(135deg, var(--wedding-gradient) 0%, var(--wedding-gradient) 50%, var(--reception-gradient) 50%, var(--reception-gradient) 100%)' 
       }}
     >
+      {/* Sacred fire and confetti particle systems */}
+      <div className="particle-canvas">
+        <Canvas>
+          <PerspectiveCamera makeDefault position={[0, 0, 8]} />
+          <ambientLight intensity={0.4} />
+          <pointLight position={[0, 5, 0]} intensity={1.5} color="#ff4400" />
+          
+          {/* Sacred fire particles for wedding side */}
+          <group position={[-4, 0, 0]}>
+            <SacredFireParticles count={2000} />
+          </group>
+          
+          {/* Confetti particles for reception side */}
+          <group position={[4, 0, 0]}>
+            <ConfettiParticles count={3000} />
+          </group>
+          
+          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.3} />
+        </Canvas>
+      </div>
+
       <div className="section-content h-full flex items-center justify-center">
         <div className="text-center z-10 max-w-6xl mx-auto px-8">
           <div ref={titleRef} className="wedding-title text-6xl md:text-8xl text-white mb-6 drop-shadow-lg">
