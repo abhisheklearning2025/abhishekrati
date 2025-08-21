@@ -1,18 +1,21 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import TurmericParticles from '../3d/TurmericParticles';
 import MusicalNoteParticles from '../3d/MusicalNoteParticles';
+import AudioReactiveParticles from '../3d/AudioReactiveParticles';
+import AudioReactiveSystem from '../media/AudioReactiveSystem';
 
 export default function HaldiSangeetSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const haldiSideRef = useRef<HTMLDivElement>(null);
   const sangeetSideRef = useRef<HTMLDivElement>(null);
+  const [audioData, setAudioData] = useState<any>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -62,6 +65,12 @@ export default function HaldiSangeetSection() {
         background: 'linear-gradient(135deg, var(--haldi-gradient) 0%, var(--haldi-gradient) 50%, var(--sangeet-gradient) 50%, var(--sangeet-gradient) 100%)' 
       }}
     >
+      {/* Audio Reactive System */}
+      <AudioReactiveSystem 
+        onAudioData={setAudioData}
+        enabled={true}
+      />
+
       {/* Dual particle systems for haldi and sangeet */}
       <div className="particle-canvas">
         <Canvas>
@@ -77,7 +86,17 @@ export default function HaldiSangeetSection() {
           
           {/* Musical note particles for sangeet side */}
           <group position={[5, 0, 0]}>
-            <MusicalNoteParticles count={2500} />
+            <MusicalNoteParticles count={1500} />
+          </group>
+          
+          {/* Audio-reactive particles for sangeet */}
+          <group position={[3, 2, -2]}>
+            <AudioReactiveParticles 
+              count={1000}
+              audioData={audioData}
+              baseColor="#9370db"
+              reactivityStrength={3}
+            />
           </group>
           
           <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.2} />

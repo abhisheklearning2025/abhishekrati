@@ -7,6 +7,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SacredFireParticles from '../3d/SacredFireParticles';
 import ConfettiParticles from '../3d/ConfettiParticles';
+import WaveShader from '../3d/shaders/WaveShader';
+import GlowShader from '../3d/shaders/GlowShader';
 
 export default function WeddingReceptionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -76,10 +78,43 @@ export default function WeddingReceptionSection() {
           
           {/* Confetti particles for reception side */}
           <group position={[4, 0, 0]}>
-            <ConfettiParticles count={3000} />
+            <ConfettiParticles count={2500} />
           </group>
           
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.3} />
+          {/* Celebration Wave Effects */}
+          <WaveShader 
+            position={[0, -4, -5]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            amplitude={0.3}
+            frequency={1.5}
+            speed={1.2}
+            colors={['#ff6b6b', '#ffd93d', '#4ecdc4']}
+            scale={1.5}
+          />
+          
+          {/* Divine Glow Effects */}
+          <GlowShader 
+            position={[0, 8, -8]}
+            color="#ffaa00"
+            intensity={2}
+            scale={3}
+          />
+          
+          <GlowShader 
+            position={[-6, 2, 6]}
+            color="#ff6666"
+            intensity={1.5}
+            scale={2}
+          />
+          
+          <GlowShader 
+            position={[6, -2, 4]}
+            color="#66ff66"
+            intensity={1.3}
+            scale={1.8}
+          />
+          
+          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.25} />
         </Canvas>
       </div>
 

@@ -143,7 +143,7 @@ export default function SacredFireParticles({ count }: SacredFireParticlesProps)
       {/* Sacred fire base glow */}
       <mesh position={[0, -2, 0]}>
         <cylinderGeometry args={[2, 2, 0.2, 12]} />
-        <meshBasicMaterial 
+        <meshLambertMaterial 
           color="#ff4400" 
           transparent 
           opacity={0.3}

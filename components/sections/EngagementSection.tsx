@@ -7,6 +7,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import RosePetalParticles from '../3d/RosePetalParticles';
 import FloatingRing from '../3d/FloatingRing';
+import PhotoGallery3D from '../3d/PhotoGallery3D';
+import InteractiveParticles from '../3d/InteractiveParticles';
 import CinematicText from '../animations/CinematicText';
 import ScrollMagic from '../animations/ScrollMagic';
 import ParallaxElements from '../animations/ParallaxElements';
@@ -28,30 +30,40 @@ export default function EngagementSection() {
     // Register GSAP plugin
     gsap.registerPlugin(ScrollTrigger);
 
-    // Initial setup
-    gsap.set([title, subtitle, content], { 
-      opacity: 0, 
-      y: 100 
-    });
+    // Wait for elements to be available
+    const checkElements = () => {
+      const elements = [title, subtitle, content].filter(Boolean);
+      if (elements.length === 0) return;
 
-    // Entrance animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top center',
-        end: 'center center',
-        scrub: 1,
-        onEnter: () => {
-          gsap.to([title, subtitle, content], {
-            opacity: 1,
-            y: 0,
-            duration: 1.5,
-            stagger: 0.3,
-            ease: 'power2.out'
-          });
+      // Initial setup - only animate existing elements
+      gsap.set(elements, { 
+        opacity: 0, 
+        y: 100 
+      });
+
+      // Entrance animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top center',
+          end: 'center center',
+          scrub: 1,
+          onEnter: () => {
+            gsap.to(elements, {
+              opacity: 1,
+              y: 0,
+              duration: 1.5,
+              stagger: 0.3,
+              ease: 'power2.out'
+            });
+          }
         }
-      }
-    });
+      });
+    };
+
+    // Check elements immediately and after a small delay
+    checkElements();
+    const timeout = setTimeout(checkElements, 100);
 
     // Parallax effect on scroll
     gsap.to(section, {
@@ -84,6 +96,7 @@ export default function EngagementSection() {
     });
 
     return () => {
+      clearTimeout(timeout);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -106,9 +119,42 @@ export default function EngagementSection() {
           <FloatingRing />
           
           {/* Rose petal particle system */}
-          <RosePetalParticles count={5000} />
+          <RosePetalParticles count={3000} />
           
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+          {/* Interactive particles that respond to mouse */}
+          <InteractiveParticles 
+            count={1500} 
+            color="#ffb6c1" 
+            size={0.08}
+            interactionRadius={4}
+            mouseInfluence={1.5}
+          />
+          
+          {/* 3D Photo Gallery */}
+          <group position={[0, -4, 2]}>
+            <PhotoGallery3D 
+              layout="grid"
+              photos={[
+                {
+                  photoType: "engagement-couple-main",
+                  title: "The Proposal",
+                  description: "Krati and Abhishek's magical moment"
+                },
+                {
+                  photoType: "engagement-ring-ceremony", 
+                  title: "Ring Exchange",
+                  description: "Sacred vows of eternal love"
+                },
+                {
+                  photoType: "engagement-family-blessing",
+                  title: "Family Blessings",
+                  description: "United in celebration"
+                }
+              ]}
+            />
+          </group>
+          
+          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.3} />
         </Canvas>
       </div>
 

@@ -29,110 +29,120 @@ export default function CinematicText({
 
     const element = textRef.current;
 
-    // Split text into individual characters
-    const chars = text.split('').map((char, index) => 
-      `<span class="char" style="display: inline-block; opacity: 0; transform: translateY(100px)">${char === ' ' ? '&nbsp;' : char}</span>`
-    ).join('');
+    // Wait for element to be fully mounted
+    const initAnimation = () => {
+      if (!element) return;
 
-    element.innerHTML = chars;
+      // Split text into individual characters
+      const chars = text.split('').map((char, index) => 
+        `<span class="char" style="display: inline-block; opacity: 0; transform: translateY(100px)">${char === ' ' ? '&nbsp;' : char}</span>`
+      ).join('');
 
-    const charElements = element.querySelectorAll('.char');
+      element.innerHTML = chars;
 
-    let animation;
+      const charElements = element.querySelectorAll('.char');
+      if (charElements.length === 0) return;
 
-    switch (animationType) {
-      case 'typewriter':
-        animation = gsap.timeline({
-          scrollTrigger: {
-            trigger: triggerElement,
-            start: 'top center',
-            toggleActions: 'play none none none'
-          }
-        });
-        
-        animation.to(charElements, {
-          opacity: 1,
-          transform: 'translateY(0)',
-          duration: 0.05,
-          stagger: 0.05,
-          delay,
-          ease: 'power2.out'
-        });
-        break;
+      let animation;
 
-      case 'morphing':
-        // Set initial state
-        gsap.set(charElements, { 
-          opacity: 0, 
-          scale: 0,
-          rotation: 180 
-        });
+      switch (animationType) {
+        case 'typewriter':
+          animation = gsap.timeline({
+            scrollTrigger: {
+              trigger: triggerElement,
+              start: 'top center',
+              toggleActions: 'play none none none'
+            }
+          });
+          
+          animation.to(charElements, {
+            opacity: 1,
+            transform: 'translateY(0)',
+            duration: 0.05,
+            stagger: 0.05,
+            delay,
+            ease: 'power2.out'
+          });
+          break;
 
-        animation = gsap.timeline({
-          scrollTrigger: {
-            trigger: triggerElement,
-            start: 'top center',
-            toggleActions: 'play none none none'
-          }
-        });
+        case 'morphing':
+          // Set initial state
+          gsap.set(charElements, { 
+            opacity: 0, 
+            scale: 0,
+            rotation: 180 
+          });
 
-        animation.to(charElements, {
-          opacity: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 0.8,
-          stagger: 0.02,
-          delay,
-          ease: 'back.out(1.7)'
-        });
-        break;
+          animation = gsap.timeline({
+            scrollTrigger: {
+              trigger: triggerElement,
+              start: 'top center',
+              toggleActions: 'play none none none'
+            }
+          });
 
-      case 'glow':
-        gsap.set(charElements, { 
-          opacity: 0,
-          textShadow: '0 0 0px currentColor'
-        });
+          animation.to(charElements, {
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            duration: 0.8,
+            stagger: 0.02,
+            delay,
+            ease: 'back.out(1.7)'
+          });
+          break;
 
-        animation = gsap.timeline({
-          scrollTrigger: {
-            trigger: triggerElement,
-            start: 'top center',
-            toggleActions: 'play none none none'
-          }
-        });
+        case 'glow':
+          gsap.set(charElements, { 
+            opacity: 0,
+            textShadow: '0 0 0px currentColor'
+          });
 
-        animation.to(charElements, {
-          opacity: 1,
-          textShadow: '0 0 20px currentColor, 0 0 40px currentColor',
-          duration: 1,
-          stagger: 0.03,
-          delay,
-          ease: 'power2.out'
-        });
-        break;
+          animation = gsap.timeline({
+            scrollTrigger: {
+              trigger: triggerElement,
+              start: 'top center',
+              toggleActions: 'play none none none'
+            }
+          });
 
-      case 'reveal':
-      default:
-        animation = gsap.timeline({
-          scrollTrigger: {
-            trigger: triggerElement,
-            start: 'top center',
-            toggleActions: 'play none none none'
-          }
-        });
+          animation.to(charElements, {
+            opacity: 1,
+            textShadow: '0 0 20px currentColor, 0 0 40px currentColor',
+            duration: 1,
+            stagger: 0.03,
+            delay,
+            ease: 'power2.out'
+          });
+          break;
 
-        animation.to(charElements, {
-          opacity: 1,
-          transform: 'translateY(0)',
-          duration: 0.6,
-          stagger: 0.02,
-          delay,
-          ease: 'power3.out'
-        });
-        break;
-    }
+        case 'reveal':
+        default:
+          animation = gsap.timeline({
+            scrollTrigger: {
+              trigger: triggerElement,
+              start: 'top center',
+              toggleActions: 'play none none none'
+            }
+          });
+
+          animation.to(charElements, {
+            opacity: 1,
+            transform: 'translateY(0)',
+            duration: 0.6,
+            stagger: 0.02,
+            delay,
+            ease: 'power3.out'
+          });
+          break;
+      }
+    };
+
+    // Initialize animations with proper timing
+    const timeout = setTimeout(initAnimation, 100);
 
     return () => {
+      clearTimeout(timeout);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [text, animationType, delay, triggerElement]);
